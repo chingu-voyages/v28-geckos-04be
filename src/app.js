@@ -3,11 +3,13 @@ let express = require('express')
 let morgan = require('morgan')
 const cors = require('cors')
 const helmet = require('helmet')
-let { NODE_ENV } = require('./config')
+let { NODE_ENV, CLIENT_ORIGIN } = require('./config')
 const usersRouter = require("./users/users-router")
 const authRouter = require("./auth/auth-router")
 
 const app = express()
+
+const PORT = process.env.PORT || 3000;
 
 const morganOption = (NODE_ENV === 'production')
   ? 'tiny'
@@ -15,12 +17,16 @@ const morganOption = (NODE_ENV === 'production')
 
   app.use(morgan(morganOption))
   app.use(helmet())
-  app.use(cors())
+  app.use(
+      cors({
+        origin: process.env.CLIENT_ORIGIN
+       })
+  );
   app.use(express.json());
   app.use(usersRouter)
   app.use("/api/auth/", authRouter);
 
-app.get('/api', (req, res) => {
+app.get('/api/mfa', (req, res) => {
     res.send('Hello, world!')
 })
 
