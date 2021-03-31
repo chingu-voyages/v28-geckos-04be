@@ -8,11 +8,11 @@
     "dev": "nodemon src/server.js",
     "migrate": "postgrator --config postgrator-config.js",
     "migrate:test": "env NODE_ENV=test npm run migrate",
-    "migrate:production": "heroku run npm run migrate",
+    "migrate:production": "heroku run PGSSLMODE=no-verify npm run migrate",
+    "postdeploy": "npm run migrate:production",
     "start": "node src/server.js",
     "predeploy": "npm audit",
-    "deploy": "git push heroku main",
-    "postdeploy": "npm run migrate:production"
+    "deploy": "git push heroku main"
   },
   "repository": {
     "type": "git",
@@ -32,6 +32,7 @@
     "express": "^4.17.1",
     "helmet": "^4.4.1",
     "jsonwebtoken": "^8.5.1",
+    "postgrator-cli": "^3.2.0",
     "knex": "^0.95.2",
     "morgan": "^1.10.0",
     "pg": "^8.5.1",
@@ -42,7 +43,6 @@
     "chai": "^4.3.3",
     "mocha": "^8.3.1",
     "nodemon": "^2.0.7",
-    "postgrator-cli": "^3.2.0",
     "supertest": "^6.1.3"
   }
 }
