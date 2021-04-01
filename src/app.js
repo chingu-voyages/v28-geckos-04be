@@ -7,11 +7,6 @@ let { NODE_ENV} = require('./config')
 const usersRouter = require("./users/users-router")
 const authRouter = require("./auth/auth-router")
 
-const PORT = process.env.PORT || '8000'
-
-//app.set("port", PORT)
-
-
 
 const app = express()
 

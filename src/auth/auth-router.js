@@ -4,7 +4,7 @@ const { requireAuth } = require('../middleware/jwt-auth')
 const authRouter = express.Router();
 
 authRouter
-    .route('/login')
+    .route('login')
     .all((req, res, next) => {
         knexInstance = req.app.get("db");
         next();
