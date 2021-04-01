@@ -3,13 +3,22 @@ let express = require('express')
 let morgan = require('morgan')
 const cors = require('cors')
 const helmet = require('helmet')
-let { NODE_ENV, CLIENT_ORIGIN } = require('./config')
+let { NODE_ENV} = require('./config')
 const usersRouter = require("./users/users-router")
 const authRouter = require("./auth/auth-router")
 
 const PORT = process.env.PORT || '8000'
 
 //app.set("port", PORT)
+
+app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept"
+    );
+    next();
+  });
 
 const app = express()
 
@@ -20,11 +29,7 @@ const morganOption = (NODE_ENV === 'production')
 
   app.use(morgan(morganOption))
   app.use(helmet())
-  app.use(
-      cors({
-        origin: process.env.CLIENT_ORIGIN
-       })
-  );
+  app.use(cors());
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
   app.use("/api/users", usersRouter);
