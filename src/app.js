@@ -7,9 +7,12 @@ let { NODE_ENV, CLIENT_ORIGIN } = require('./config')
 const usersRouter = require("./users/users-router")
 const authRouter = require("./auth/auth-router")
 
+const PORT = process.env.PORT || '8000'
+
+//app.set("port", PORT)
+
 const app = express()
 
-const PORT = process.env.PORT || 3000;
 
 const morganOption = (NODE_ENV === 'production')
   ? 'tiny'
@@ -23,10 +26,11 @@ const morganOption = (NODE_ENV === 'production')
        })
   );
   app.use(express.json());
-  app.use(usersRouter)
-  app.use("/api/auth/", authRouter);
+  app.use(express.urlencoded({ extended: false }));
+  app.use("/api/users", usersRouter);
+   app.use("/api/auth/", authRouter);
 
-app.get('/api', (req, res) => {
+   app.get('/api', (req, res) => {
     res.send('Hello, world!')
 })
 

@@ -15,12 +15,13 @@ const serializeUser = (user) => {
 
 let knexInstance;
 
-UsersRouter.route("/api/users")
+UsersRouter
+    .route("/")
     .all((req, res, next) => {
         knexInstance = req.app.get("db");
         next();
     })
-    .get(requireAuth, (req, res) => {
+    .get((req, res) => {
         console.log(req.user);
         res.json(serializeUser(req.user));
     })
@@ -75,5 +76,53 @@ UsersRouter.route("/api/users")
             });
         });
     });
+
+UsersRouter
+    .route("/:id")
+    .all((req, res, next) => {
+        UsersService.getById(req.app.get("db"), req.params.id)
+            .then((user) => {
+                if (!user) {
+                    return res.status(404).json({
+                        error: { message: `User doesn't exist` },
+                    });
+                }
+                res.user = user;
+                next();
+            })
+            .catch(next);
+    })
+    .get((req, res, next) => {
+        res.json(res.user);
+
+    }).patch((req, res, next) => {
+        const{
+            username, 
+            password, 
+            name
+        } = req.body;
+        const userToUpdate = {
+            username, 
+            password, 
+            name
+        };
+
+        const numberOfValues = Object.values(userToUpdate).filter(Boolean).length;
+        if (numberOfValues === 0) {
+            logger.error(`Invalid update without required fields`);
+            return res.status(400).json({
+                error: {
+                    message: `Request body must contain either 'username', 'password', 'name'`,
+                },
+            });
+        }
+        UsersService.updateUser(req.app.get("db"), req.params.id, userToUpdate)
+            .then((numRowsAffected) => {
+                res.status(204).end();
+            })
+            .catch(next);
+    });
+
+
 
 module.exports = UsersRouter;
