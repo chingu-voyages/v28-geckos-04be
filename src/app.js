@@ -26,7 +26,7 @@ const morganOption = (NODE_ENV === 'production')
   app.use(usersRouter)
   app.use("/api/auth/", authRouter);
 
-app.get('/api/mfa', (req, res) => {
+app.get('/api', (req, res) => {
     res.send('Hello, world!')
 })
 
