@@ -11,14 +11,7 @@ const PORT = process.env.PORT || '8000'
 
 //app.set("port", PORT)
 
-app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.header(
-      "Access-Control-Allow-Headers",
-      "Origin, X-Requested-With, Content-Type, Accept"
-    );
-    next();
-  });
+
 
 const app = express()
 
@@ -33,7 +26,16 @@ const morganOption = (NODE_ENV === 'production')
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
   app.use("/api/users", usersRouter);
-   app.use("/api/auth/", authRouter);
+  app.use("/api/auth/", authRouter);
+  app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept"
+    );
+    next();
+  });
+
 
    app.get('/api', (req, res) => {
     res.send('Hello, world!')
