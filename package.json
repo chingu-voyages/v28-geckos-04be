@@ -18,6 +18,9 @@
     "url": "git+https://github.com/chingu-voyages/v28-geckos-04be.git"
   },
   "keywords": [],
+  "engines": {
+    "node": "14.15.4"
+  },
   "author": "",
   "license": "ISC",
   "bugs": {
